@@ -62,28 +62,53 @@ python -m pytest tests/ -v
 
 ## Architecture
 
-### Two-Stage Matching Pipeline
+### End-to-End Pipeline
 
 ```
-Setlist Track
-     │
-     ▼
-┌─────────────────────────┐
-│  Stage 1: Deterministic │  Free, instant, 100% reliable
-│  • Case-insensitive     │  Matches ~60% of tracks
-│  • Suffix stripping     │
-└────────┬────────────────┘
-         │ unmatched
-         ▼
-┌─────────────────────────┐
-│  Stage 2: LLM Fuzzy     │  OpenAI gpt-4o-mini
-│  • Abbreviations        │  Only for remaining ~40%
-│  • Medley splitting     │  Cached per normalized name
-│  • Cover detection      │  Exponential backoff on failure
-└────────┬────────────────┘
-         │
-         ▼
-    CSV Output
+┌──────────────────────────┐     ┌──────────────────────┐
+│  Hosted JSON API (Gist)  │     │  Catalog CSV (local)  │
+└────────────┬─────────────┘     └──────────┬───────────┘
+             │ GET request                   │ csv.DictReader
+             │ (fallback: local JSON)        │
+             ▼                               ▼
+┌──────────────────────────┐     ┌──────────────────────┐
+│  Validate JSON structure │     │  Validate CSV columns │
+└────────────┬─────────────┘     └──────────┬───────────┘
+             │                               │
+             ▼                               │
+┌──────────────────────────┐                 │
+│  Flatten Setlists        │                 │
+│  (shows → tracks + date  │                 │
+│   + venue)               │                 │
+└────────────┬─────────────┘                 │
+             │                               │
+             ▼                               ▼
+┌────────────────────────────────────────────────────────┐
+│                  For Each Track                        │
+│                                                        │
+│   Contains "/"? ──Yes──▶ Medley → LLM splits & matches │
+│        │                                               │
+│        No                                              │
+│        ▼                                               │
+│   ┌─────────────────────────┐                          │
+│   │  Stage 1: Deterministic │  Free, instant           │
+│   │  • Case-insensitive     │  Matches ~60% of tracks  │
+│   │  • Suffix stripping     │                          │
+│   └────────┬────────────────┘                          │
+│            │ unmatched                                  │
+│            ▼                                            │
+│   ┌─────────────────────────┐                          │
+│   │  Stage 2: LLM Fuzzy     │  gpt-4o-mini            │
+│   │  • Abbreviations        │  Cached per track        │
+│   │  • Cover detection      │  Backoff on failure      │
+│   └─────────────────────────┘                          │
+└───────────────────────┬────────────────────────────────┘
+                        │
+                        ▼
+              ┌───────────────────┐
+              │  matched_setlists │
+              │      .csv         │
+              └───────────────────┘
 ```
 
 ### Production Features
