@@ -1,0 +1,12 @@
+show_date,venue_name,setlist_track_name,matched_catalog_id,matched_catalog_title,match_confidence
+2024-11-15,The Echo Lounge,Neon Dreams,CAT-001,Neon Dreams,Exact
+2024-11-15,The Echo Lounge,Tokyo (Acoustic),CAT-002,Midnight in Tokyo,High
+2024-11-15,The Echo Lounge,Desert Rain / Ocean Avenue,CAT-004,Desert Rain,High
+2024-11-15,The Echo Lounge,Desert Rain / Ocean Avenue,CAT-005,Ocean Avenue,High
+2024-11-15,The Echo Lounge,Wonderwall,None,,None
+2024-11-15,The Echo Lounge,Shattered Glass,CAT-003,Shattered Glass,Exact
+2024-11-16,Fillmore,Neon Dreams,CAT-001,Neon Dreams,Exact
+2024-11-16,Fillmore,Velocity (Extended Jam),CAT-007,Velocity,Exact
+2024-11-16,Fillmore,Golden Gate,CAT-006,Golden Gate,Exact
+2024-11-16,Fillmore,Midnight In Tokyo,CAT-002,Midnight in Tokyo,Exact
+2024-11-16,Fillmore,Smsls Lk Tn Sprt,None,,None
