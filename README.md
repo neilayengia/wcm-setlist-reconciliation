@@ -52,9 +52,6 @@ wcm-setlist-agent/
     test_ingestion.py  — Catalog, flattening, validation, API fallback (16 tests)
     test_llm.py        — Mocked LLM: parsing, medley, cover, retry, cache (11 tests)
     test_pipeline.py   — End-to-end pipeline + CSV output (2 tests)
-  .github/
-    workflows/
-      ci.yml           — GitHub Actions: lint + test on push/PR
 ```
 
 ## Running Tests
@@ -100,7 +97,6 @@ Setlist Track
 | **Startup validation** | `validate_config()` checks files/env before pipeline runs |
 | **Rate limiting** | Configurable delay between consecutive LLM calls |
 | **Log rotation** | Optional file logging with automatic rotation (10 MB, 5 backups) |
-| **CI/CD** | GitHub Actions runs tests on every push and PR |
 
 ## Design Decisions
 
@@ -162,7 +158,6 @@ This stage matched **6 out of 10 tracks (60%)** without any LLM call. In a produ
 - Optional log rotation for long-running deployments
 - Rate limiting between consecutive LLM calls to stay within API quotas
 - Input validation at ingestion to catch malformed data early
-- GitHub Actions CI to catch regressions automatically
 
 ### 5. Data Model Awareness
 
